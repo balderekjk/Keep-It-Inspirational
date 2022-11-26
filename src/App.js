@@ -1,24 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import PrivateRoute from './Components/PrivateRoute';
+import Navbar from './Components/Navbar';
+import WelcomeCard from './Components/WelcomeCard';
+import AuthForm from './Components/AuthForm';
+import Remember from './Components/Remember';
+import Journal from './Components/Journal';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<WelcomeCard />} />
+          <Route path="/auth" element={<AuthForm />} />
+          <Route
+            path="/remember"
+            element={<PrivateRoute Component={Remember} />}
+          />
+          <Route
+            path="/journal"
+            element={<PrivateRoute Component={Journal} />}
+          />
+        </Routes>
+      </div>
+    </AuthProvider>
   );
 }
 
