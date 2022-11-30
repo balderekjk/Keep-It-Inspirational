@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import styles from './Navbar.module.css';
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ props }) => {
   const [isMenuClosed, setisMenuClosed] = useState(true);
   const menuBar = useRef(null);
   const { currentUser, logout } = useAuth();
@@ -24,7 +24,9 @@ const Navbar = () => {
           <div
             ref={menuBar}
             className={styles['menu-opener']}
-            onClick={() => setisMenuClosed(!isMenuClosed)}
+            onClick={() => {
+              setisMenuClosed(!isMenuClosed);
+            }}
             style={{
               width: '96.609px',
               justifyContent: 'center',
@@ -52,12 +54,33 @@ const Navbar = () => {
           >
             <li>Save Art</li>
           </Link>
-          <Link
+          {/* <Link
             onClick={() => setisMenuClosed(true)}
             className={isMenuClosed ? styles['none'] : undefined}
             to="/journal"
           >
             <li>Journal</li>
+          </Link> */}
+          <Link
+            onClick={() => setisMenuClosed(true)}
+            className={isMenuClosed ? styles['none'] : undefined}
+            to={`/personal/${props.userId}`}
+          >
+            <li>My Art</li>
+          </Link>
+          <Link
+            onClick={() => setisMenuClosed(true)}
+            className={isMenuClosed ? styles['none'] : undefined}
+            to={`/explore/${props.userId}`}
+          >
+            <li>Explore</li>
+          </Link>
+          <Link
+            onClick={() => setisMenuClosed(true)}
+            className={isMenuClosed ? styles['none'] : undefined}
+            to={`/journals/${props.userId}`}
+          >
+            <li>Entries</li>
           </Link>
         </div>
       </ul>

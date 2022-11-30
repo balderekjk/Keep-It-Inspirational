@@ -1,14 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
+import { useAuth } from '../contexts/AuthContext';
+import axios from 'axios';
 import * as Yup from 'yup';
 import cardStyles from './WelcomeCard.module.css';
 import formStyles from './AuthForm.module.css';
 
-export default function Remember() {
-  const [date, setDate] = useState('');
+export default function Remember({ props }) {
+  // const [userId, setUserId] = useState(null);
+  // const [date, setDate] = useState('');
+  const { currentUser } = useAuth();
   // const [isSignIn, setIsSignIn] = useState(true);
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
   // const [isPrivate, setIsPrivate] = useState(null);
+
+  // useEffect(() => {
+  //   let foundUser = props.userList.filter((el) => {
+  //     console.log(el);
+  //     return el.email_address === currentUser.email;
+  //   });
+  //   foundUser && setUserId(foundUser[0].person_id);
+  // }, [currentUser.email, props.userList]);
+
+  console.log(currentUser);
 
   const formik = useFormik({
     initialValues: {
@@ -46,11 +60,27 @@ export default function Remember() {
         }
       ),
     }),
-    onSubmit: (values, { resetForm }) => {
-      let currentTime = new Date(Date.now());
+    onSubmit: async (values, { resetForm }) => {
+      values.mediaUpload = getYouTubeId();
+      let newDate = new Date(Date.now());
       console.log('reached');
-      setDate(currentTime.toISOString());
-      resetForm({ values: '' });
+      newDate = newDate.toISOString();
+
+      const body = {
+        // +props.userId
+        person_id: +sessionStorage.getItem('id'),
+        title: values.title,
+        media_type: values.type,
+        privacy: values.privacy,
+        media_url: values.mediaUpload,
+        description: values.description,
+        date: newDate,
+      };
+
+      await axios
+        .post(`http://localhost:5580/arts`, body)
+        .then(() => resetForm({ values: '' }))
+        .catch((err) => console.log(err));
     },
   });
 
@@ -65,19 +95,32 @@ export default function Remember() {
 
   const handlePrivacyButtons = (e) => (formik.values.privacy = e.target.value);
 
+  const getYouTubeId = () => {
+    if (formik.values.mediaUpload.includes('youtube.com')) {
+      let sub1 = formik.values.mediaUpload.indexOf('?v=') + 3;
+      let sub2 = sub1 + 11;
+      return formik.values.mediaUpload.substring(sub1, sub2);
+    } else if (formik.values.mediaUpload.includes('youtu.be')) {
+      let sub1 = formik.values.mediaUpload.indexOf('.be/') + 4;
+      let sub2 = sub1 + 11;
+      return formik.values.mediaUpload.substring(sub1, sub2);
+    } else {
+      return formik.values.mediaUpload;
+    }
+  };
+
   let sub = formik.values.description;
 
   console.log(sub);
 
   return (
     <div className={cardStyles['main-page-content']}>
-      {date}
       {/* {date.substring(4, 16).concat(date.substring(16, 21))} */}
       <form
         className={cardStyles['content-card']}
         onSubmit={formik.handleSubmit}
       >
-        <h2>Save Art</h2>
+        <h2 onClick={() => getYouTubeId()}>Save Art</h2>
         <input
           id="title"
           name="title"
@@ -136,7 +179,7 @@ export default function Remember() {
               name="type"
               onChange={(e) => handleTypeButtons(e)}
               onBlur={formik.handleBlur}
-              value="Series"
+              value="TV Series"
             />
             <label htmlFor="series">TV Series</label>
             <input
@@ -234,71 +277,6 @@ export default function Remember() {
           Save
         </button>
       </form>
-      <div
-        style={{
-          width: '100%',
-          border: '1px solid red',
-          // display: 'flex',
-          // gap: '1ch',
-          // flexWrap: 'wrap',
-          // justifyContent: 'center',
-        }}
-      >
-        <div
-          // className={cardStyles['content-card']}
-          style={{
-            // background: 'hsl(220, 70%, 35%)',
-            color: 'hsl(240, 100%, 17%)',
-            width: '100%',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: '100%',
-              background: 'white',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'end',
-              }}
-            >
-              <h2>{formik.values.title}</h2>
-              <div style={{ fontSize: '14px', margin: '3px' }}>
-                ({formik.values.type})
-              </div>
-            </div>
-            <button className={formStyles['add-journal']}>Add Entry</button>
-            <img
-              src={formik.values.mediaUpload}
-              style={{
-                width: '100%',
-
-                border: '2px solid transparent',
-                borderRadius: '5px',
-              }}
-            />
-            <span style={{ display: 'flex' }}>
-              <p
-                style={{
-                  fontSize: '16px',
-                  // background: 'white',
-                  color: 'black',
-                  padding: '0 4px',
-                  borderRadius: '3px',
-                }}
-                title="sub"
-              >
-                {sub[100] ? sub.substring(0, 100) + '...' : sub}
-              </p>
-            </span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

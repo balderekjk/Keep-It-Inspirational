@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styles from './WelcomeCard.module.css';
+import { useAuth } from '../contexts/AuthContext';
 
-const WelcomeCard = () => {
+const WelcomeCard = ({ props }) => {
+  // const [currentId, setCurrentId] = useState(-1);
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    currentUser &&
+      axios.get(`http://localhost:5580/persons`).then((res) =>
+        res.data.filter((el) => {
+          el.email_address === currentUser.email &&
+            props.findUserId(el.person_id);
+        })
+      );
+  }, [props, currentUser]);
+
   return (
     <div className={styles['main-page-content']}>
       <div className={styles['content-card']}>

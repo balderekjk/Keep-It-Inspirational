@@ -2,14 +2,16 @@ import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import * as Yup from 'yup';
 import './AuthForm.module.css';
 import cardStyles from './WelcomeCard.module.css';
 
 export default function Signup() {
+  const [currentId, setCurrentId] = useState(-1);
   const [isSignIn, setIsSignIn] = useState(true);
   const [error, setError] = useState('');
-  const { signup, login } = useAuth();
+  const { signup, login, currentUser } = useAuth();
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -49,21 +51,64 @@ export default function Signup() {
     }),
     onSubmit: async (values) => {
       try {
-        isSignIn
-          ? await login(values.email, values.password)
-          : await signup(values.email, values.password);
-        // .then((result) => {
-        //     return result.user.updateProfile({
-        //       displayName: values.username,
+        const body = {
+          email_address: values.email,
+        };
+
+        const sendValues = async () => {
+          if (isSignIn) {
+            await login(values.email, values.password);
+          } else {
+            await signup(values.email, values.password).then(async () => {
+              await axios
+                .post(`http://localhost:5580/persons`, body)
+                .then((res) => console.log('success', res))
+                .catch((err) => console.log(err));
+            });
+          }
+        };
+
+        sendValues();
+
+        // isSignIn
+        //   ? await login(values.email, values.password)
+        //   : // .then(async function () {
+        //     //     await axios.get(`http://localhost:5580/persons`).then((res) => {
+        //     //       console.log(res.data);
+        //     //       let answer = res.data.filter((el) => {
+        //     //         return el.email_address === values.email;
+        //     //       });
+        //     //       console.log(answer[0].person_id);
+        //     //       let person_id = answer[0].person_id;
+        //     //     });
+        //     //   })
+        //     await signup(values.email, values.password).then(async () => {
+        //       await axios
+        //         .post(`http://localhost:5580/persons`, body)
+        //         .then((res) => console.log('success', res))
+        //         .catch((err) => console.log(err));
+        //       // return result.user.updateProfile({
+        //       //   displayName: values.username,
+        //       // });
         //     });
-        //   });
+        // axios
+        //   .get(`http://localhost:5580/persons`)
+        //   .then((res) =>
+        //     // res.data.filter((el) => {
+        //     //   console.log();
+        //     // })
+        //     console.log(currentUser)
+        //   )
+        //   .catch((err) => console.log(err));
         navigate('/');
       } catch (error) {
         // setError(error);
-        setError(error.message.substring(10));
+        setError(error.message);
       }
     },
   });
+
+  console.log(currentId);
 
   return (
     <div className={cardStyles['main-page-content']}>

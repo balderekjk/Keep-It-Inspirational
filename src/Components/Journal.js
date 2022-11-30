@@ -1,79 +1,55 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import * as Yup from 'yup';
 import cardStyles from './WelcomeCard.module.css';
 import formStyles from './AuthForm.module.css';
 
-export default function Journal() {
+export default function Journal({ props }) {
+  let params = useParams();
+  let [artTitle, setArtTitle] = useState('');
+  // console.log(new URLSearchParams(useLocation().search).get('queryParamName'));
   // const [isSignIn, setIsSignIn] = useState(true);
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
   // const [isPrivate, setIsPrivate] = useState(null);
 
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5580/arts/${Object.values(params)[0]}`)
+      .then((res) => {
+        setArtTitle(res.data.title);
+      });
+  }, []);
+
   const formik = useFormik({
     initialValues: {
-      prompt: '',
       title: '',
-      type: '',
-      privacy: '',
-      mediaUpload: '',
-      description: '',
+      entry: '',
     },
     validationSchema: Yup.object({
-      prompt: Yup.string(),
       title: Yup.string().required('Required'),
-      type: Yup.string().required('Required'),
-      privacy: Yup.string().required('Required'),
-      mediaUpload: Yup.string().matches(
-        /youtube.com|youtu.be|themoviedb.org|tmdb.org|pinimg.com/,
-        'Link not accepted'
-      ),
-      description: Yup.string().test(
-        'no-slurs',
-        'Revise wording',
-        function (value) {
-          if (value) {
-            if (
-              value.match(
-                /fuck|fag|nigg|cunt|gook|\bchink|bitch|(\S*\*\S)/gi
-              ) !== null
-            ) {
-              // setIsPrivate(true);
-              return false;
-            }
-            // setIsPrivate(false);
-            return true;
-          }
-        }
-      ),
+      entry: Yup.string().required('Required').min(75),
     }),
-    onSubmit: (values, { resetForm }) => {
-      console.log(values);
-      resetForm({ values: '' });
+    onSubmit: async (values, { resetForm }) => {
+      let newDate = new Date(Date.now());
+      newDate = newDate.toISOString();
+
+      const body = {
+        person_id: +sessionStorage.getItem('id'),
+        art_id: +Object.values(params)[0],
+        art_title: artTitle,
+        title: values.title,
+        entry: values.entry,
+        date: newDate,
+      };
+
+      await axios
+        .post(`http://localhost:5580/journals`, body)
+        .then(() => resetForm({ values: '' }))
+        .catch((err) => console.log(err));
     },
   });
-
-  // useEffect(() => {
-  //   console.log('reached me');
-  // }, [isPrivate]);
-
-  const handlePromptSelect = (e) => {
-    formik.values.prompt = e.target.value;
-    console.log(formik);
-  };
-
-  const handleTypeButtons = (e) => {
-    formik.values.type = e.target.value;
-    console.log(formik);
-  };
-
-  const handlePrivacyButtons = (e) => (formik.values.privacy = e.target.value);
-
-  let sub = formik.values.description;
-
-  let example =
-    'What is the meaning of this existence? What can you do to stop asking yourself this question? How long can this title go on? Does it keep stretching out beyond the screen? As life stretches beyond our screams, our pleas for mercy?';
-
-  console.log(sub[28]);
 
   return (
     <div className={cardStyles['main-page-content']}>
@@ -82,6 +58,7 @@ export default function Journal() {
         onSubmit={formik.handleSubmit}
       >
         <h2>Journal Entry</h2>
+        {artTitle && <h5 style={{ marginBottom: '1ch' }}>for {artTitle}</h5>}
         <input
           id="title"
           name="title"
@@ -93,51 +70,22 @@ export default function Journal() {
           value={formik.values.title}
         />
         {isSubmitClicked && formik.errors.title && <p>{formik.errors.title}</p>}
-        <fieldset id="privacy-field">
-          <legend>
-            <h4>Share Setting</h4>
-          </legend>
-          <div className={formStyles['radio-group']}>
-            <input
-              type="radio"
-              id="private"
-              name="privacy"
-              onChange={(e) => handlePrivacyButtons(e)}
-              onBlur={formik.handleBlur}
-              value="private"
-            />
-            <label htmlFor="private">Private</label>
-            <input
-              type="radio"
-              id="public"
-              name="privacy"
-              onChange={(e) => handlePrivacyButtons(e)}
-              onBlur={formik.handleBlur}
-              value="public"
-            />
-            <label htmlFor="public">Public</label>
-          </div>
-        </fieldset>
-        {isSubmitClicked && formik.errors.privacy && (
-          <p>{formik.errors.privacy}</p>
-        )}
         <fieldset>
           <legend>
             <h4>Inspire</h4>
           </legend>
           <textarea
-            id="description"
-            name="description"
+            className={cardStyles['entryText']}
+            id="entry"
+            name="entry"
             rows="10"
             maxLength="4050"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.description}
+            value={formik.values.entry}
           />
         </fieldset>
-        {formik.values.description && formik.errors.description && (
-          <p>{formik.errors.description}</p>
-        )}
+        {isSubmitClicked && formik.errors.entry && <p>{formik.errors.entry}</p>}
         <button type="submit" onClick={() => setIsSubmitClicked(true)}>
           Save
         </button>

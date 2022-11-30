@@ -27,3 +27,53 @@
   box-shadow: 1px 2px 2px hsl(207, 44%, 39%);
   /* background: rgb(231, 208, 211); */
 }
+
+.flex {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5em;
+}
+
+.editDesc {
+  width: 53vw;
+}
+
+.entryText,
+.editDesc {
+  font-size: 1em;
+}
+
+@media screen and (max-width: 850px) {
+  .flex {
+    width: 67%;
+  }
+
+  .editDesc {
+    width: 64vw;
+  }
+}
+
+@media screen and (max-width: 635px) {
+  .flex {
+    width: 100%;
+  }
+
+  .editDesc {
+    width: 94vw;
+  }
+
+  .entryText {
+    width: 87vw;
+  }
+
+  .entryText,
+  .editDesc {
+    font-size: 0.9em;
+  }
+
+  h2 {
+    font-size: 1.3em;
+  }
+}
