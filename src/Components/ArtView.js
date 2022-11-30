@@ -6,31 +6,10 @@ import cardStyles from './WelcomeCard.module.css';
 const ArtView = ({ props }) => {
   const [gallery, setGallery] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
+  const [isDelete, setIsDelete] = useState(0);
   const [artId, setArtId] = useState(-1);
-  // const [textareaText, setTextareaText] = useState('');
-  // const [isYouTube, setIsYouTube] = useState(false);
   const descriptionRef = useRef(null);
   let navigate = useNavigate();
-
-  // const getPersonal = () => {
-  //   if (props.editable) {
-  //     axios
-  //       .get(`http://localhost:5580/personal/${sessionStorage.getItem('id')}`)
-  //       .then((res) => {
-  //         console.log(res);
-  //         setGallery(res.data);
-  //       })
-  //       .catch((err) => console.log(err));
-  //   } else {
-  //     axios
-  //       .get(`http://localhost:5580/explore/${sessionStorage.getItem('id')}`)
-  //       .then((res) => {
-  //         console.log(res);
-  //         setGallery(res.data);
-  //       })
-  //       .catch((err) => console.log(err));
-  //   }
-  // };
 
   useEffect(() => {
     setGallery([]);
@@ -38,7 +17,6 @@ const ArtView = ({ props }) => {
       axios
         .get(`http://localhost:5580/personal/${sessionStorage.getItem('id')}`)
         .then((res) => {
-          console.log(res);
           setGallery(res.data);
         })
         .catch((err) => console.log(err));
@@ -46,7 +24,6 @@ const ArtView = ({ props }) => {
       axios
         .get(`http://localhost:5580/explore/${sessionStorage.getItem('id')}`)
         .then((res) => {
-          console.log(res);
           setGallery(res.data);
         })
         .catch((err) => console.log(err));
@@ -55,6 +32,13 @@ const ArtView = ({ props }) => {
 
   const redirect = (path) => {
     return navigate(path);
+  };
+
+  const handleDelete = () => {
+    axios.delete(`http://localhost:5580/arts/${artId}`).then((res) => {
+      setGallery('');
+      window.location.reload();
+    });
   };
 
   const handleSubmitEdit = async (artIdDb) => {
@@ -71,8 +55,10 @@ const ArtView = ({ props }) => {
         description: descriptionRef.current.value,
       };
       if (artIdDb === artId) {
-        await axios.put(`http://localhost:5580/personal/${props.userId}`, body);
-        // setGallery(getPersonal());
+        await axios.put(
+          `http://localhost:5580/personal/${sessionStorage.getItem('id')}`,
+          body
+        );
       } else {
         console.log('Error');
       }
@@ -83,21 +69,15 @@ const ArtView = ({ props }) => {
     <div
       className={`${cardStyles['main-page-content']} ${cardStyles['flex-r']}`}
     >
-      {/* <div className={cardStyles['content-card']}>ViewArt</div> */}
       {gallery.map((attr) => {
         return (
           <div
             key={attr.art_id}
             className={cardStyles.flex}
             style={{
-              // width: '50%',
               border: '1px solid blue',
               background: '#fbf7f5',
               borderRadius: '0.7em',
-              // display: 'flex',
-              // gap: '1ch',
-              // flexWrap: 'wrap',
-              // justifyContent: 'center',
             }}
           >
             <div
@@ -108,20 +88,72 @@ const ArtView = ({ props }) => {
             >
               <h2>{attr.title}</h2>
 
-              <div style={{ fontSize: '14px', margin: '3px' }}>
+              <div style={{ fontSize: '14px', marginLeft: '3px' }}>
                 ({attr.media_type})
               </div>
             </div>
             {props.editable && (
-              <button
-                onClick={() => redirect(`/journal/${attr.art_id}`)}
+              <div
                 style={{
-                  border: '1px solid darkblue',
-                  color: 'darkblue',
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  alignItems: 'center',
+                  width: '100%',
                 }}
               >
-                Add Entry
-              </button>
+                <button
+                  onClick={() => redirect(`/journal/${attr.art_id}`)}
+                  style={{
+                    border: '1px solid darkblue',
+                    color: 'darkblue',
+                  }}
+                >
+                  Add Entry
+                </button>
+                <div>
+                  <button
+                    onClick={() => {
+                      if (isDelete === 0) {
+                        setArtId(attr.art_id);
+                      } else if (isDelete === 1 && attr.art_id === artId) {
+                        handleDelete();
+                      }
+                      if (isDelete < 1) {
+                        setIsDelete(isDelete + 1);
+                      } else {
+                        setIsDelete(0);
+                      }
+                    }}
+                    style={{
+                      width: 'fit-content',
+                      border:
+                        artId === attr.art_id && isDelete === 1
+                          ? '1px solid red'
+                          : '1px solid darkblue',
+                      color:
+                        artId === attr.art_id && isDelete === 1
+                          ? 'red'
+                          : 'darkblue',
+                    }}
+                  >
+                    Delete
+                  </button>
+                  {isDelete > 0 && artId === attr.art_id && (
+                    <button
+                      onClick={() => {
+                        setIsDelete(0);
+                      }}
+                      style={{
+                        width: 'fit-content',
+                        border: '1px solid darkblue',
+                        color: 'darkblue',
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
             )}
             <a
               style={{ cursor: 'pointer' }}
@@ -155,7 +187,7 @@ const ArtView = ({ props }) => {
               <p
                 style={{
                   fontSize: '16px',
-                  // background: 'white',
+                  whiteSpace: 'pre-line',
                   color: 'black',
                   padding: '0 4px',
                   borderRadius: '3px',
@@ -165,16 +197,7 @@ const ArtView = ({ props }) => {
                   <textarea
                     className={cardStyles['editDesc']}
                     rows="5"
-                    // onChange={(e) => {
-                    //   setTextareaText(e.target.value);
-                    // }}
-                    // value={textareaText}
-                    // style={{
-                    //   fontSize: '0.9em',
-                    // }}
                     defaultValue={attr.description}
-                    // onClick={() => console.log(this)}
-                    // style={{ whiteSpace: 'pre-line' }}
                     ref={descriptionRef}
                   />
                 ) : (
@@ -182,41 +205,27 @@ const ArtView = ({ props }) => {
                 )}
               </p>
             </span>
-            {/* <div style={{ display: 'flex', width: '100%' }}> */}
 
             {props.editable && (
-              <button
-                onClick={() => {
-                  setArtId(attr.art_id);
-                  setIsEdit(!isEdit);
-                  handleSubmitEdit(attr.art_id);
-                  isEdit && window.location.reload();
-                }}
-                style={{
-                  border: '1px solid darkblue',
-                  color: 'darkblue',
-                }}
-                // disabled={
-
-                // }
-              >
-                {isEdit && artId === attr.art_id
-                  ? 'Submit Edit'
-                  : 'Edit Description'}
-              </button>
+              <>
+                <button
+                  onClick={() => {
+                    setArtId(attr.art_id);
+                    setIsEdit(!isEdit);
+                    handleSubmitEdit(attr.art_id);
+                    isEdit && window.location.reload();
+                  }}
+                  style={{
+                    border: '1px solid darkblue',
+                    color: 'darkblue',
+                  }}
+                >
+                  {isEdit && artId === attr.art_id
+                    ? 'Submit Edit'
+                    : 'Edit Description'}
+                </button>
+              </>
             )}
-            {/* {!isEdit ? 'Edit Description' : 'Submit Edit'}
-              
-              {/* <button
-                style={{
-                  border: '1px solid darkred',
-                  margin: '1ch',
-                  color: 'darkred',
-                }}
-              >
-                Delete
-              </button> */}
-            {/* </div> */}
           </div>
         );
       })}

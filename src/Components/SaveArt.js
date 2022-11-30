@@ -1,28 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useFormik } from 'formik';
-import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as Yup from 'yup';
 import cardStyles from './WelcomeCard.module.css';
 import formStyles from './AuthForm.module.css';
 
-export default function Remember({ props }) {
-  // const [userId, setUserId] = useState(null);
-  // const [date, setDate] = useState('');
-  const { currentUser } = useAuth();
-  // const [isSignIn, setIsSignIn] = useState(true);
+export default function SaveArt() {
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
-  // const [isPrivate, setIsPrivate] = useState(null);
-
-  // useEffect(() => {
-  //   let foundUser = props.userList.filter((el) => {
-  //     console.log(el);
-  //     return el.email_address === currentUser.email;
-  //   });
-  //   foundUser && setUserId(foundUser[0].person_id);
-  // }, [currentUser.email, props.userList]);
-
-  console.log(currentUser);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -51,10 +37,8 @@ export default function Remember({ props }) {
                 /fuck|fag|nigg|cunt|gook|\bchink|bitch|(\S*\*\S)/gi
               ) !== null
             ) {
-              // setIsPrivate(true);
               return false;
             }
-            // setIsPrivate(false);
           }
           return true;
         }
@@ -63,11 +47,9 @@ export default function Remember({ props }) {
     onSubmit: async (values, { resetForm }) => {
       values.mediaUpload = getYouTubeId();
       let newDate = new Date(Date.now());
-      console.log('reached');
       newDate = newDate.toISOString();
 
       const body = {
-        // +props.userId
         person_id: +sessionStorage.getItem('id'),
         title: values.title,
         media_type: values.type,
@@ -79,18 +61,15 @@ export default function Remember({ props }) {
 
       await axios
         .post(`http://localhost:5580/arts`, body)
-        .then(() => resetForm({ values: '' }))
+        .then(() => {
+          resetForm({ values: '' });
+          navigate(`/personal/${sessionStorage.getItem('id')}`);
+        })
         .catch((err) => console.log(err));
     },
   });
-
-  // useEffect(() => {
-  //   console.log('reached me');
-  // }, [isPrivate]);
-
   const handleTypeButtons = (e) => {
     formik.values.type = e.target.value;
-    console.log(formik);
   };
 
   const handlePrivacyButtons = (e) => (formik.values.privacy = e.target.value);
@@ -109,13 +88,8 @@ export default function Remember({ props }) {
     }
   };
 
-  let sub = formik.values.description;
-
-  console.log(sub);
-
   return (
     <div className={cardStyles['main-page-content']}>
-      {/* {date.substring(4, 16).concat(date.substring(16, 21))} */}
       <form
         className={cardStyles['content-card']}
         onSubmit={formik.handleSubmit}

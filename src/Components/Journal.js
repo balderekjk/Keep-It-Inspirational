@@ -1,18 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as Yup from 'yup';
 import cardStyles from './WelcomeCard.module.css';
-import formStyles from './AuthForm.module.css';
 
-export default function Journal({ props }) {
+export default function Journal() {
+  let navigate = useNavigate();
   let params = useParams();
   let [artTitle, setArtTitle] = useState('');
-  // console.log(new URLSearchParams(useLocation().search).get('queryParamName'));
-  // const [isSignIn, setIsSignIn] = useState(true);
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
-  // const [isPrivate, setIsPrivate] = useState(null);
 
   useEffect(() => {
     axios
@@ -20,7 +17,7 @@ export default function Journal({ props }) {
       .then((res) => {
         setArtTitle(res.data.title);
       });
-  }, []);
+  }, [params]);
 
   const formik = useFormik({
     initialValues: {
@@ -46,7 +43,10 @@ export default function Journal({ props }) {
 
       await axios
         .post(`http://localhost:5580/journals`, body)
-        .then(() => resetForm({ values: '' }))
+        .then(() => {
+          resetForm({ values: '' });
+          navigate(`/journals/{${sessionStorage.getItem('id')}}`);
+        })
         .catch((err) => console.log(err));
     },
   });

@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import styles from './Navbar.module.css';
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ props }) => {
+const Navbar = () => {
   const [isMenuClosed, setisMenuClosed] = useState(true);
   const menuBar = useRef(null);
   const { currentUser, logout } = useAuth();
@@ -13,7 +13,6 @@ const Navbar = ({ props }) => {
       <ul>
         <Link onClick={() => setisMenuClosed(true)} to="/">
           <li className={styles['rotate']} style={{ fontWeight: '700' }}>
-            {/* style={{ marginTop: '3px' }} */}
             <span>K</span>
             <span>I</span>
             <span>I</span>
@@ -34,6 +33,39 @@ const Navbar = ({ props }) => {
           >
             <li style={{ fontSize: '1.7em' }}>&equiv;</li>
           </div>
+
+          {currentUser && (
+            <>
+              <Link
+                onClick={() => setisMenuClosed(true)}
+                className={isMenuClosed ? styles['none'] : undefined}
+                to={`/explore/${sessionStorage.getItem('id')}`}
+              >
+                <li>Explore</li>
+              </Link>
+              <Link
+                onClick={() => setisMenuClosed(true)}
+                className={isMenuClosed ? styles['none'] : undefined}
+                to="/saveart"
+              >
+                <li>Save Art</li>
+              </Link>
+              <Link
+                onClick={() => setisMenuClosed(true)}
+                className={isMenuClosed ? styles['none'] : undefined}
+                to={`/personal/${sessionStorage.getItem('id')}`}
+              >
+                <li>My Art</li>
+              </Link>
+              <Link
+                onClick={() => setisMenuClosed(true)}
+                className={isMenuClosed ? styles['none'] : undefined}
+                to={`/journals/${sessionStorage.getItem('id')}`}
+              >
+                <li>Entries</li>
+              </Link>
+            </>
+          )}
           <Link
             onClick={() => setisMenuClosed(true)}
             className={isMenuClosed ? styles['none'] : undefined}
@@ -46,41 +78,6 @@ const Navbar = ({ props }) => {
             >
               {currentUser ? 'Log Out' : 'Start Here'}
             </li>
-          </Link>
-          <Link
-            onClick={() => setisMenuClosed(true)}
-            className={isMenuClosed ? styles['none'] : undefined}
-            to="/remember"
-          >
-            <li>Save Art</li>
-          </Link>
-          {/* <Link
-            onClick={() => setisMenuClosed(true)}
-            className={isMenuClosed ? styles['none'] : undefined}
-            to="/journal"
-          >
-            <li>Journal</li>
-          </Link> */}
-          <Link
-            onClick={() => setisMenuClosed(true)}
-            className={isMenuClosed ? styles['none'] : undefined}
-            to={`/personal/${props.userId}`}
-          >
-            <li>My Art</li>
-          </Link>
-          <Link
-            onClick={() => setisMenuClosed(true)}
-            className={isMenuClosed ? styles['none'] : undefined}
-            to={`/explore/${props.userId}`}
-          >
-            <li>Explore</li>
-          </Link>
-          <Link
-            onClick={() => setisMenuClosed(true)}
-            className={isMenuClosed ? styles['none'] : undefined}
-            to={`/journals/${props.userId}`}
-          >
-            <li>Entries</li>
           </Link>
         </div>
       </ul>

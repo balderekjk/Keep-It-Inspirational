@@ -6,30 +6,21 @@ import PrivateRoute from './Components/PrivateRoute';
 import Navbar from './Components/Navbar';
 import WelcomeCard from './Components/WelcomeCard';
 import AuthForm from './Components/AuthForm';
-import Remember from './Components/Remember';
+import SaveArt from './Components/SaveArt';
 import Journal from './Components/Journal';
 import ArtView from './Components/ArtView';
 import JournalView from './Components/JournalView';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
-  const [userList, setUserList] = useState([]);
-  let [userId, setUserId] = useState(-1);
-
   const findUserId = (userId) => {
-    // setUserId(userId);
     window.sessionStorage.setItem('id', userId);
-    setUserId(sessionStorage.getItem('id'));
   };
 
   return (
     <AuthProvider>
       <div className="App">
-        <Navbar
-          props={{
-            userId: userId,
-          }}
-        />
+        <Navbar />
         <Routes>
           <Route
             path="/"
@@ -37,34 +28,18 @@ function App() {
               <WelcomeCard
                 props={{
                   findUserId: findUserId,
-                  // onGetUserList: getUserList,
-                  userId: userId,
                 }}
               />
             }
           />
           <Route path="/auth" element={<AuthForm />} />
           <Route
-            path="/remember"
-            element={
-              <PrivateRoute
-                Component={Remember}
-                props={{
-                  userId: userId,
-                }}
-              />
-            }
+            path="/saveart"
+            element={<PrivateRoute Component={SaveArt} />}
           />
           <Route
             path="/journal/:id"
-            element={
-              <PrivateRoute
-                Component={Journal}
-                props={{
-                  userId: userId,
-                }}
-              />
-            }
+            element={<PrivateRoute Component={Journal} />}
           />
           <Route
             path="/personal/:id"
@@ -72,7 +47,6 @@ function App() {
               <PrivateRoute
                 Component={ArtView}
                 props={{
-                  userId: userId,
                   editable: true,
                 }}
               />
@@ -84,7 +58,6 @@ function App() {
               <PrivateRoute
                 Component={ArtView}
                 props={{
-                  userId: userId,
                   editable: false,
                 }}
               />
@@ -92,14 +65,7 @@ function App() {
           />
           <Route
             path="/journals/:id"
-            element={
-              <PrivateRoute
-                Component={JournalView}
-                props={{
-                  userId: userId,
-                }}
-              />
-            }
+            element={<PrivateRoute Component={JournalView} />}
           />
         </Routes>
       </div>

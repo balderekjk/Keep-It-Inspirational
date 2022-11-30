@@ -1,22 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Remember from './Remember';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import cardStyles from './WelcomeCard.module.css';
 
-const JournalView = ({ props }) => {
+const JournalView = () => {
   const [gallery, setGallery] = useState([]);
-  const [startEdit, setStartEdit] = useState(false);
+  const [journalId, setJournalId] = useState(-1);
+  const [isDelete, setIsDelete] = useState(0);
 
   useEffect(() => {
     axios
       .get(`http://localhost:5580/journals/${sessionStorage.getItem('id')}`)
       .then((res) => {
-        console.log(res);
         setGallery(res.data);
       })
       .catch((err) => console.log(err));
-  }, [props.userId]);
+  }, []);
+
+  const handleDelete = () => {
+    axios.delete(`http://localhost:5580/journals/${journalId}`).then((res) => {
+      setGallery('');
+      window.location.reload();
+    });
+  };
 
   return (
     <div
@@ -28,14 +33,9 @@ const JournalView = ({ props }) => {
             key={attr.journal_id}
             className={cardStyles.flex}
             style={{
-              // width: '50%',
               background: 'linear-gradient(white, hsl(0, 0%, 90%)',
               borderRadius: '0.7em',
               boxShadow: '1px 2px 2px grey',
-              // display: 'flex',
-              // gap: '1ch',
-              // flexWrap: 'wrap',
-              // justifyContent: 'center',
             }}
           >
             <div
@@ -45,10 +45,54 @@ const JournalView = ({ props }) => {
                 alignItems: 'center',
               }}
             >
-              <h2>{attr.title}</h2>
+              <div
+                style={{
+                  display: 'flex',
+                  width: '100%',
+                }}
+              >
+                <h2 style={{ width: '100%', marginLeft: '20px' }}>
+                  {attr.title}
+                </h2>
+                <div
+                  style={{
+                    padding: '0 6px',
+                    fontSize: '24px',
+                    color:
+                      isDelete === 1 && attr.journal_id === journalId && 'red',
+                    cursor: 'pointer',
+                    fontWeight:
+                      isDelete === 1 && attr.journal_id === journalId && '600',
+                  }}
+                  onClick={() => {
+                    if (isDelete === 0) {
+                      setJournalId(attr.journal_id);
+                    } else if (
+                      isDelete === 1 &&
+                      attr.journal_id === journalId
+                    ) {
+                      handleDelete();
+                    }
+                    if (isDelete < 1) {
+                      setIsDelete(isDelete + 1);
+                    } else {
+                      setIsDelete(0);
+                    }
+                  }}
+                >
+                  X
+                </div>
+              </div>
               <h4>{attr.art_title}</h4>
-              <p>{attr.entry}</p>
-              <p>{attr.date.substring(0, 10)}</p>
+
+              <p
+                style={{
+                  whiteSpace: 'pre-line',
+                }}
+              >
+                {attr.entry}
+              </p>
+              <p>{attr.date.substring(0, 10)} (UTC)</p>
             </div>
           </div>
         );

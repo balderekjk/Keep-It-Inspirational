@@ -8,16 +8,14 @@ import './AuthForm.module.css';
 import cardStyles from './WelcomeCard.module.css';
 
 export default function Signup() {
-  const [currentId, setCurrentId] = useState(-1);
   const [isSignIn, setIsSignIn] = useState(true);
   const [error, setError] = useState('');
-  const { signup, login, currentUser } = useAuth();
+  const { signup, login } = useAuth();
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       isSignIn: isSignIn,
       email: '',
-      // username: '',
       password: '',
       passwordConfirm: '',
     },
@@ -27,13 +25,6 @@ export default function Signup() {
         .min(6, 'Must be at least 6 characters')
         .matches(/(?=.*[@])(?=.*\S+$)/, 'invalid email')
         .required('Required'),
-      // username: Yup.string().when('isSignIn', {
-      //   is: false,
-      //   then: Yup.string()
-      //     .min(4, 'Must be at least 4 characters')
-      //     .max(40, 'Must be less than 40 characters')
-      //     .required('Required'),
-      // }),
       password: Yup.string()
         .matches(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
@@ -67,48 +58,13 @@ export default function Signup() {
             });
           }
         };
-
         sendValues();
-
-        // isSignIn
-        //   ? await login(values.email, values.password)
-        //   : // .then(async function () {
-        //     //     await axios.get(`http://localhost:5580/persons`).then((res) => {
-        //     //       console.log(res.data);
-        //     //       let answer = res.data.filter((el) => {
-        //     //         return el.email_address === values.email;
-        //     //       });
-        //     //       console.log(answer[0].person_id);
-        //     //       let person_id = answer[0].person_id;
-        //     //     });
-        //     //   })
-        //     await signup(values.email, values.password).then(async () => {
-        //       await axios
-        //         .post(`http://localhost:5580/persons`, body)
-        //         .then((res) => console.log('success', res))
-        //         .catch((err) => console.log(err));
-        //       // return result.user.updateProfile({
-        //       //   displayName: values.username,
-        //       // });
-        //     });
-        // axios
-        //   .get(`http://localhost:5580/persons`)
-        //   .then((res) =>
-        //     // res.data.filter((el) => {
-        //     //   console.log();
-        //     // })
-        //     console.log(currentUser)
-        //   )
-        //   .catch((err) => console.log(err));
         navigate('/');
       } catch (error) {
-        // setError(error);
         setError(error.message);
       }
     },
   });
-
-  console.log(currentId);
 
   return (
     <div className={cardStyles['main-page-content']}>
@@ -129,20 +85,6 @@ export default function Signup() {
         {!isSignIn && formik.touched.email && formik.errors.email && (
           <p>{formik.errors.email}</p>
         )}
-        {/* {!isSignIn && (
-          <input
-            id="username"
-            name="username"
-            type="text"
-            placeholder="username"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.username}
-          />
-        )}
-        {!isSignIn && formik.touched.username && formik.errors.username && (
-          <p>{formik.errors.username}</p>
-        )} */}
         <input
           id="password"
           name="password"

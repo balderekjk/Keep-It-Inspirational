@@ -1,15 +1,8 @@
 .main-page-content {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
-  /* background: linear-gradient(
-    -20deg,
-    hsl(207, 38%, 38%) 79%,
-    hsl(41, 88%, 62%)
-  ); */
   background-image: url('../assets/bg_blue.png');
-  /* background-size: contain; */
   color: hsl(240, 100%, 17%);
   min-height: calc(100vh - 56px);
   font-size: 110%;
@@ -25,7 +18,6 @@
   border: 2px solid hsl(241, 66%, 45%);
   border-radius: 10px;
   box-shadow: 1px 2px 2px hsl(207, 44%, 39%);
-  /* background: rgb(231, 208, 211); */
 }
 
 .flex {
@@ -64,10 +56,6 @@
     width: 94vw;
   }
 
-  .entryText {
-    width: 87vw;
-  }
-
   .entryText,
   .editDesc {
     font-size: 0.9em;
@@ -75,5 +63,11 @@
 
   h2 {
     font-size: 1.3em;
+  }
+}
+
+@media screen and (max-width: 515px) {
+  .content-card {
+    width: 100vw;
   }
 }
