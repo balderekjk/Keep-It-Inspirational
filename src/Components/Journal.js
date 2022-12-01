@@ -26,7 +26,7 @@ export default function Journal() {
     },
     validationSchema: Yup.object({
       title: Yup.string().required('Required'),
-      entry: Yup.string().required('Required').min(75),
+      entry: Yup.string().required('Required').min(40),
     }),
     onSubmit: async (values, { resetForm }) => {
       let newDate = new Date(Date.now());

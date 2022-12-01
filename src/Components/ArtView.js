@@ -169,7 +169,7 @@ const ArtView = ({ props }) => {
                 alt={`${attr.title} personal description`}
                 src={
                   attr.media_url.length === 11
-                    ? `https://img.youtube.com/vi/${attr.media_url}/sddefault.jpg`
+                    ? `https://img.youtube.com/vi/${attr.media_url}/hqdefault.jpg`
                     : attr.media_url
                 }
                 style={{
