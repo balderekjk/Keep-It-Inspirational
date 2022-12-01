@@ -15,14 +15,22 @@ const ArtView = ({ props }) => {
     setGallery([]);
     if (props.editable) {
       axios
-        .get(`http://localhost:5580/personal/${sessionStorage.getItem('id')}`)
+        .get(
+          `${
+            process.env.REACT_APP_SERVER_URL
+          }/personal/${sessionStorage.getItem('id')}`
+        )
         .then((res) => {
           setGallery(res.data);
         })
         .catch((err) => console.log(err));
     } else {
       axios
-        .get(`http://localhost:5580/explore/${sessionStorage.getItem('id')}`)
+        .get(
+          `${process.env.REACT_APP_SERVER_URL}/explore/${sessionStorage.getItem(
+            'id'
+          )}`
+        )
         .then((res) => {
           setGallery(res.data);
         })
@@ -35,10 +43,12 @@ const ArtView = ({ props }) => {
   };
 
   const handleDelete = () => {
-    axios.delete(`http://localhost:5580/arts/${artId}`).then((res) => {
-      setGallery('');
-      window.location.reload();
-    });
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_URL}/arts/${artId}`)
+      .then((res) => {
+        setGallery('');
+        window.location.reload();
+      });
   };
 
   const handleSubmitEdit = async (artIdDb) => {
@@ -56,7 +66,9 @@ const ArtView = ({ props }) => {
       };
       if (artIdDb === artId) {
         await axios.put(
-          `http://localhost:5580/personal/${sessionStorage.getItem('id')}`,
+          `${
+            process.env.REACT_APP_SERVER_URL
+          }/personal/${sessionStorage.getItem('id')}`,
           body
         );
       } else {

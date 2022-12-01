@@ -60,7 +60,7 @@ export default function SaveArt() {
       };
 
       await axios
-        .post(`http://localhost:5580/arts`, body)
+        .post(`${process.env.REACT_APP_SERVER_URL}/arts`, body)
         .then(() => {
           resetForm({ values: '' });
           navigate(`/personal/${sessionStorage.getItem('id')}`);

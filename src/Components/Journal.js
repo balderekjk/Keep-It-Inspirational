@@ -13,7 +13,9 @@ export default function Journal() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5580/arts/${Object.values(params)[0]}`)
+      .get(
+        `${process.env.REACT_APP_SERVER_URL}/arts/${Object.values(params)[0]}`
+      )
       .then((res) => {
         setArtTitle(res.data.title);
       });
@@ -42,7 +44,7 @@ export default function Journal() {
       };
 
       await axios
-        .post(`http://localhost:5580/journals`, body)
+        .post(`${process.env.REACT_APP_SERVER_URL}/journals`, body)
         .then(() => {
           resetForm({ values: '' });
           navigate(`/journals/{${sessionStorage.getItem('id')}}`);

@@ -7,12 +7,13 @@ const WelcomeCard = ({ props }) => {
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    axios.get(`http://localhost:5580/persons`).then((res) =>
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/persons`).then((res) => {
+      console.log(res.data);
       res.data.filter((el) => {
         el.email_address === currentUser.email &&
           props.findUserId(el.person_id);
-      })
-    );
+      });
+    });
   }, [props, currentUser]);
 
   return (

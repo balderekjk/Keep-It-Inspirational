@@ -52,7 +52,7 @@ export default function Signup() {
           } else {
             await signup(values.email, values.password).then(async () => {
               await axios
-                .post(`http://localhost:5580/persons`, body)
+                .post(`${process.env.REACT_APP_SERVER_URL}/persons`, body)
                 .then((res) => console.log('success', res))
                 .catch((err) => console.log(err));
             });

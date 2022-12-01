@@ -9,7 +9,11 @@ const JournalView = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5580/journals/${sessionStorage.getItem('id')}`)
+      .get(
+        `${process.env.REACT_APP_SERVER_URL}/journals/${sessionStorage.getItem(
+          'id'
+        )}`
+      )
       .then((res) => {
         setGallery(res.data);
       })
@@ -17,10 +21,12 @@ const JournalView = () => {
   }, []);
 
   const handleDelete = () => {
-    axios.delete(`http://localhost:5580/journals/${journalId}`).then((res) => {
-      setGallery('');
-      window.location.reload();
-    });
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_URL}/journals/${journalId}`)
+      .then((res) => {
+        setGallery('');
+        window.location.reload();
+      });
   };
 
   return (
