@@ -43,7 +43,7 @@ export default function Signup() {
     onSubmit: async (values) => {
       try {
         const body = {
-          email_address: values.email,
+          email_address: values.email.toLowerCase(),
         };
 
         const sendValues = async () => {
