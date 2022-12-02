@@ -14,7 +14,7 @@ const Navbar = () => {
         <Link onClick={() => setisMenuClosed(true)} to="/">
           <li
             className={styles['rotate']}
-            style={{ fontWeight: '500', fontSize: '23px' }}
+            style={{ fontWeight: '500', fontSize: '28px' }}
           >
             <span>K</span>
             <span>I</span>
