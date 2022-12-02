@@ -8,6 +8,7 @@ h4 {
 }
 
 fieldset {
+  max-width: 100%;
   width: 200px;
   border-radius: 6px;
   margin-bottom: 2px;
@@ -80,6 +81,7 @@ option {
 }
 
 textarea {
+  max-width: 100%;
   width: 447px;
   font-size: 1.15em;
   border-radius: 5px;
