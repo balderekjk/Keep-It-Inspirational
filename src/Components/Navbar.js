@@ -12,7 +12,10 @@ const Navbar = () => {
     <nav id={styles['top-nav']}>
       <ul>
         <Link onClick={() => setisMenuClosed(true)} to="/">
-          <li className={styles['rotate']} style={{ fontWeight: '700' }}>
+          <li
+            className={styles['rotate']}
+            style={{ fontWeight: '500', fontSize: '23px' }}
+          >
             <span>K</span>
             <span>I</span>
             <span>I</span>

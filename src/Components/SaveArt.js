@@ -158,6 +158,25 @@ export default function SaveArt() {
             <label htmlFor="series">TV Series</label>
             <input
               type="radio"
+              id="music"
+              name="type"
+              onChange={(e) => handleTypeButtons(e)}
+              onBlur={formik.handleBlur}
+              value="Music"
+            />
+            <label htmlFor="music">Music</label>
+            <input
+              type="radio"
+              id="game"
+              name="type"
+              onChange={(e) => handleTypeButtons(e)}
+              onBlur={formik.handleBlur}
+              value="Video Game"
+            />
+            <label htmlFor="game">Video Game</label>
+            <br />
+            <input
+              type="radio"
               id="poetry"
               name="type"
               onChange={(e) => handleTypeButtons(e)}

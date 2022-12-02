@@ -111,10 +111,16 @@ textarea:focus {
   textarea {
     width: 280px;
   }
+  fieldset {
+    width: 280px;
+  }
 }
 
 @media screen and (max-width: 310px) {
   textarea {
     width: 245px;
+  }
+  fieldset {
+    width: 280px;
   }
 }
