@@ -174,7 +174,6 @@ export default function SaveArt() {
               value="Video Game"
             />
             <label htmlFor="game">Video Game</label>
-            <br />
             <input
               type="radio"
               id="poetry"
