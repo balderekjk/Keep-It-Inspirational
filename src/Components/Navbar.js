@@ -34,15 +34,16 @@ const Navbar = () => {
             <li style={{ fontSize: '1.7em' }}>&equiv;</li>
           </div>
 
+          <Link
+            onClick={() => setisMenuClosed(true)}
+            className={isMenuClosed ? styles['none'] : undefined}
+            to={`/explore/${sessionStorage.getItem('id')}`}
+          >
+            <li>Explore</li>
+          </Link>
+
           {currentUser && (
             <>
-              <Link
-                onClick={() => setisMenuClosed(true)}
-                className={isMenuClosed ? styles['none'] : undefined}
-                to={`/explore/${sessionStorage.getItem('id')}`}
-              >
-                <li>Explore</li>
-              </Link>
               <Link
                 onClick={() => setisMenuClosed(true)}
                 className={isMenuClosed ? styles['none'] : undefined}

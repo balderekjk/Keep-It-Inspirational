@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import cardStyles from './WelcomeCard.module.css';
 
-const ArtView = ({ props }) => {
+const ArtView = (props) => {
   const [gallery, setGallery] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(0);

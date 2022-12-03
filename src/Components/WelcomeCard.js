@@ -8,11 +8,12 @@ const WelcomeCard = ({ props }) => {
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/persons`).then((res) => {
-      console.log(res.data);
-      res.data.filter((el) => {
-        el.email_address === currentUser.email &&
-          props.findUserId(el.person_id);
-      });
+      currentUser
+        ? res.data.filter((el) => {
+            el.email_address === currentUser.email &&
+              props.findUserId(el.person_id);
+          })
+        : props.findUserId('0');
     });
   }, [props, currentUser]);
 

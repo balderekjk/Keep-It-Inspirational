@@ -54,14 +54,15 @@ function App() {
           />
           <Route
             path="/explore/:id"
-            element={
-              <PrivateRoute
-                Component={ArtView}
-                props={{
-                  editable: false,
-                }}
-              />
-            }
+            element={<ArtView editable={false} />}
+            // element={
+            //   <PrivateRoute
+            //     Component={ArtView}
+            //     props={{
+            //       editable: false,
+            //     }}
+            //   />
+            // }
           />
           <Route
             path="/journals/:id"
