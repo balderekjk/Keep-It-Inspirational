@@ -13,7 +13,6 @@ const ArtView = ({ props }) => {
 
   useEffect(() => {
     setGallery([]);
-    console.log(sessionStorage.getItem('id'));
     if (props.editable) {
       axios
         .get(
