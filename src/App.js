@@ -1,7 +1,5 @@
 import './App.css';
-import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import axios from 'axios';
 import PrivateRoute from './Components/PrivateRoute';
 import Navbar from './Components/Navbar';
 import WelcomeCard from './Components/WelcomeCard';
