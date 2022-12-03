@@ -15,7 +15,7 @@ ul {
   margin: 0;
   width: 100%;
   list-style: none;
-  padding: 0 2em;
+  padding: 0 1.5ch;
 }
 
 li {
@@ -35,7 +35,7 @@ nav a:hover {
 }
 
 .rotate:hover span:nth-child(1) {
-  margin-top: 14px;
+  margin-top: 13px;
 }
 
 span {
