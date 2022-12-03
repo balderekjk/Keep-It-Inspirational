@@ -13,7 +13,7 @@ const ArtView = ({ props }) => {
 
   useEffect(() => {
     setGallery([]);
-    console.log(props.editable);
+    console.log(sessionStorage.getItem('id'));
     if (props.editable) {
       axios
         .get(
@@ -37,7 +37,7 @@ const ArtView = ({ props }) => {
         })
         .catch((err) => console.log(err));
     }
-  }, [props]);
+  }, [props.editable]);
 
   const redirect = (path) => {
     return navigate(path);
