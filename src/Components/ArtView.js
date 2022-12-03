@@ -51,7 +51,7 @@ const ArtView = ({ props }) => {
       });
   };
 
-  const handleSubmitEdit = async (artIdDb) => {
+  const handleSubmitEdit = (artIdDb) => {
     if (isEdit) {
       if (
         /fuck|fag|nigg|cunt|gook|\bchink|bitch|(\S*\*\S)/gi.test(
@@ -65,14 +65,18 @@ const ArtView = ({ props }) => {
         description: descriptionRef.current.value,
       };
       if (artIdDb === artId) {
-        await axios.put(
-          `${
-            process.env.REACT_APP_SERVER_URL
-          }/personal/${sessionStorage.getItem('id')}`,
-          body
-        );
-      } else {
-        console.log('Error');
+        axios
+          .put(
+            `${
+              process.env.REACT_APP_SERVER_URL
+            }/personal/${sessionStorage.getItem('id')}`,
+            body
+          )
+          .then(
+            setTimeout(() => {
+              window.location.reload();
+            }, 300)
+          );
       }
     }
   };
@@ -217,7 +221,6 @@ const ArtView = ({ props }) => {
                 )}
               </p>
             </span>
-
             {props.editable && (
               <>
                 <button
@@ -225,7 +228,6 @@ const ArtView = ({ props }) => {
                     setArtId(attr.art_id);
                     setIsEdit(!isEdit);
                     handleSubmitEdit(attr.art_id);
-                    isEdit && window.location.reload();
                   }}
                   style={{
                     border: '1px solid darkblue',
