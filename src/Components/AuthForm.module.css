@@ -8,6 +8,9 @@ h4 {
 }
 
 fieldset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   max-width: 100%;
   width: 200px;
   border-radius: 6px;
@@ -93,7 +96,11 @@ textarea:focus {
 }
 
 .radio-group {
-  width: 190px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
   font-size: 14px;
 }
 

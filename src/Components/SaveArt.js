@@ -111,87 +111,94 @@ export default function SaveArt() {
             <h4>Art Type</h4>
           </legend>
           <div className={formStyles['radio-group']}>
-            <input
-              type="radio"
-              id="movie"
-              name="type"
-              onChange={(e) => handleTypeButtons(e)}
-              onBlur={formik.handleBlur}
-              value="Movie"
-            />
-            <label htmlFor="movie">Movie</label>
-            <input
-              type="radio"
-              id="book"
-              name="type"
-              onChange={(e) => handleTypeButtons(e)}
-              onBlur={formik.handleBlur}
-              value="Book"
-            />
-            <label htmlFor="book">Book</label>
-            <input
-              type="radio"
-              id="speech"
-              name="type"
-              onChange={(e) => handleTypeButtons(e)}
-              onBlur={formik.handleBlur}
-              value="Speech"
-            />
-            <label htmlFor="speech">Speech</label>
-            <input
-              type="radio"
-              id="static"
-              name="type"
-              onChange={(e) => handleTypeButtons(e)}
-              onBlur={formik.handleBlur}
-              value="Static/Visual"
-            />
-            <label htmlFor="static">Static/Visual</label>
-            <input
-              type="radio"
-              id="series"
-              name="type"
-              onChange={(e) => handleTypeButtons(e)}
-              onBlur={formik.handleBlur}
-              value="TV Series"
-            />
-            <label htmlFor="series">TV Series</label>
-            <input
-              type="radio"
-              id="music"
-              name="type"
-              onChange={(e) => handleTypeButtons(e)}
-              onBlur={formik.handleBlur}
-              value="Music"
-            />
-            <label htmlFor="music">Music</label>
-            <input
-              type="radio"
-              id="game"
-              name="type"
-              onChange={(e) => handleTypeButtons(e)}
-              onBlur={formik.handleBlur}
-              value="Video Game"
-            />
-            <label htmlFor="game">Video Game</label>
-            <input
-              type="radio"
-              id="poetry"
-              name="type"
-              onChange={(e) => handleTypeButtons(e)}
-              onBlur={formik.handleBlur}
-              value="Poetry"
-            />
-            <label htmlFor="poetry">Poetry</label>
-            <input
-              type="radio"
-              id="podcast"
-              name="type"
-              onChange={(e) => handleTypeButtons(e)}
-              onBlur={formik.handleBlur}
-              value="Podcast"
-            />
-            <label htmlFor="podcast">Podcast</label>
+            <div>
+              <input
+                type="radio"
+                id="movie"
+                name="type"
+                onChange={(e) => handleTypeButtons(e)}
+                onBlur={formik.handleBlur}
+                value="Movie"
+              />
+              <label htmlFor="movie">Movie</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="book"
+                name="type"
+                onChange={(e) => handleTypeButtons(e)}
+                onBlur={formik.handleBlur}
+                value="Book"
+              />
+              <label htmlFor="book">Book</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="speech"
+                name="type"
+                onChange={(e) => handleTypeButtons(e)}
+                onBlur={formik.handleBlur}
+                value="Speech"
+              />
+              <label htmlFor="speech">Speech</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="static"
+                name="type"
+                onChange={(e) => handleTypeButtons(e)}
+                onBlur={formik.handleBlur}
+                value="Static/Visual"
+              />
+              <label htmlFor="static">Static/Visual</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="series"
+                name="type"
+                onChange={(e) => handleTypeButtons(e)}
+                onBlur={formik.handleBlur}
+                value="TV Series"
+              />
+              <label htmlFor="series">TV Series</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="music"
+                name="type"
+                onChange={(e) => handleTypeButtons(e)}
+                onBlur={formik.handleBlur}
+                value="Music"
+              />
+              <label htmlFor="music">Music</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="game"
+                name="type"
+                onChange={(e) => handleTypeButtons(e)}
+                onBlur={formik.handleBlur}
+                value="Video Game"
+              />
+              <label htmlFor="game">Video Game</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="poetry"
+                name="type"
+                onChange={(e) => handleTypeButtons(e)}
+                onBlur={formik.handleBlur}
+                value="Poetry"
+              />
+              <label htmlFor="poetry">Poetry</label>
+            </div>
           </div>
         </fieldset>
         {isSubmitClicked && formik.errors.type && <p>{formik.errors.type}</p>}
