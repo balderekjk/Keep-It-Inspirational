@@ -54,15 +54,7 @@ function App() {
           />
           <Route
             path="/explore/:id"
-            element={<ArtView editable={false} />}
-            // element={
-            //   <PrivateRoute
-            //     Component={ArtView}
-            //     props={{
-            //       editable: false,
-            //     }}
-            //   />
-            // }
+            element={<ArtView props={{ editable: false }} />}
           />
           <Route
             path="/journals/:id"
