@@ -77,7 +77,10 @@ const Navbar = () => {
           >
             <li
               onClick={() => {
-                currentUser && logout();
+                if (currentUser) {
+                  logout();
+                  return sessionStorage.setItem('id', '0');
+                }
               }}
             >
               {currentUser ? 'Log Out' : 'Start Here'}
