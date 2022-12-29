@@ -46,6 +46,7 @@ const JournalView = () => {
           >
             <div
               style={{
+                width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -57,7 +58,7 @@ const JournalView = () => {
                   width: '100%',
                 }}
               >
-                <h2 style={{ width: '100%', marginLeft: '20px' }}>
+                <h2 style={{ width: '100%', marginLeft: '26px' }}>
                   {attr.title}
                 </h2>
                 <div
@@ -69,6 +70,7 @@ const JournalView = () => {
                     cursor: 'pointer',
                     fontWeight:
                       isDelete === 1 && attr.journal_id === journalId && '600',
+                    marginLeft: 'auto',
                   }}
                   onClick={() => {
                     if (isDelete === 0) {
